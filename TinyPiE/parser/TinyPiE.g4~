@@ -22,7 +22,9 @@ mulExpr: mulExpr MULOP unaryExpr
 
 unaryExpr: VALUE			# literalExpr
 	| IDENTIFIER			# varExpr
-	| '(' expr ')'			# parenExpr
+	| '-' unaryExpr		# minusExpr
+	| '~' unaryExpr		# notExpr
+	| '(' expr ')'		# parenExpr
 	;
 
 ADDOP: '+'|'-';
@@ -31,7 +33,6 @@ MULOP: '*'|'/';
 
 BITOR: '|';
 BITAND: '&';
-
 
 IDENTIFIER: 'x'|'y'|'z';
 VALUE: [0-9]|[1-9]+[0-9]|'0';

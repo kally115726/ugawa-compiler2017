@@ -27,7 +27,9 @@ public class ParseTreeInterpreter extends InterpreterBase {
 			int lhsValue = evalExpr(ctx.bitOrExpr(), env);
 			int rhsValue = evalExpr(ctx.bitAndExpr(), env);
 			if (ctx.BITOR().getText().equals("|"))
-				return lhsValue | rhsValue;
+				return lhsValue + rhsValue;
+			else
+				return lhsValue - rhsValue;
 		} else if (ctxx instanceof BitAndExprContext) {
 			BitAndExprContext ctx = (BitAndExprContext) ctxx;
 			if (ctx.bitAndExpr() == null)
@@ -35,7 +37,9 @@ public class ParseTreeInterpreter extends InterpreterBase {
 			int lhsValue = evalExpr(ctx.bitAndExpr(), env);
 			int rhsValue = evalExpr(ctx.addExpr(), env);
 			if (ctx.BITAND().getText().equals("&"))
-				return lhsValue & rhsValue;
+				return lhsValue + rhsValue;
+			else
+				return lhsValue - rhsValue;
 		}  else if (ctxx instanceof AddExprContext) {
 			AddExprContext ctx = (AddExprContext) ctxx;
 			if (ctx.addExpr() == null)
