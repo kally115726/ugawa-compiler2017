@@ -1,5 +1,7 @@
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import parser.TinyPiEParser.BitOrExprContext;
+import parser.TinyPiEParser.BitAndExprContext;
 import parser.TinyPiEParser.AddExprContext;
 import parser.TinyPiEParser.ExprContext;
 import parser.TinyPiEParser.LiteralExprContext;
@@ -11,7 +13,21 @@ public class ASTGenerator {
 	ASTNode translateExpr(ParseTree ctxx) {
 		if (ctxx instanceof ExprContext) {
 			ExprContext ctx = (ExprContext) ctxx;
-			return translateExpr(ctx.addExpr());
+			return translateExpr(ctx.bitOrExpr());
+		} else if (ctxx instanceof BitOrExprContext) {
+			BitOrExprContext ctx = (BitOrExprContext) ctxx;
+			if (ctx.bitOrExpr() == null)
+				return translateExpr(ctx.bitAndExpr());
+			ASTNode lhs = translateExpr(ctx.bitOrExpr());
+			ASTNode rhs = translateExpr(ctx.bitAndExpr());
+			return new ASTBinaryExprNode(ctx.BITOR().getText(), lhs, rhs);
+		}else if (ctxx instanceof BitAndExprContext) {
+			BitAndExprContext ctx = (BitAndExprContext) ctxx;
+			if (ctx.bitAndExpr() == null)
+				return translateExpr(ctx.addExpr());
+			ASTNode lhs = translateExpr(ctx.bitAndExpr());
+			ASTNode rhs = translateExpr(ctx.addExpr());
+			return new ASTBinaryExprNode(ctx.BITAND().getText(), lhs, rhs);
 		} else if (ctxx instanceof AddExprContext) {
 			AddExprContext ctx = (AddExprContext) ctxx;
 			if (ctx.addExpr() == null)
